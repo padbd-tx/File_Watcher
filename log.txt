@@ -1,0 +1,2 @@
+File(s) Deleted: [('033122.pdf', 6819), ('042922.pdf', 6826), ('Claims.xlsx', 22455), ('facebook-bpdarrow.zip', 793710210), ('tx172_20221211.zip', 60742845)] at 2022-12-11 20:41:00 
+Multiple File Changes Detected: [('033122.pdf', 6819), ('042922.pdf', 6826), ('Claims.xlsx', 22455), ('facebook-bpdarrow.zip', 793710210), ('tx172_20221211.zip', 60742845)], 2022-12-11 20:41:00
