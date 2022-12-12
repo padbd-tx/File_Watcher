@@ -13,29 +13,57 @@ log_file = 'log.txt'
 
 # Function to return files in a directory:
 def file_in_directory(my_dir: str):
-    files = [(f, getsize(join(my_dir, f))) for f in listdir(my_dir) if isfile(join(my_dir, f))]
+    """
+    This function takes a directory path as input and returns a list of files in the directory, along with their sizes.
 
+    :param my_dir: The directory path to search for files.
+    :type my_dir: str
+    :return: A list of tuples containing the file names and sizes.
+    :rtype: list
+    """
+    files = [(f, getsize(join(my_dir, f))) for f in listdir(my_dir) if isfile(join(my_dir, f))]
     return files
 
 
 # Function comparing two lists:
 def list_compare(original_list: list, new_list: list):
+    """
+    This function compares two lists of files and returns a list of files that are present in the second list but not in the first, or False if there are no differences between the lists.
+
+    :param original_list: The first list of files to compare.
+    :type original_list: List[Tuple[str, int]]
+    :param new_list: The second list of files to compare.
+    :type new_list: List[Tuple[str, int]]
+    :return: A list of files that are present in the second list but not in the first, or False if there are no differences between the lists.
+    :rtype: Union[List[Tuple[str, int]], bool]
+    """
+    current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     sorted(original_list, key=lambda x: x[0])
     sorted(new_list, key=lambda x: x[0])
 
-    if len(new_list) != len(original_list):
-        return True
-    elif original_list != new_list:
-        return True
+    if len(new_list) < len(original_list):
+        rem_file = [x for x in original_list if x not in new_list]
+        with open(log_file, 'a') as file:
+            file.write(f'\nFile(s) Deleted: {rem_file} at {current_time} \n')
+        return rem_file
+    elif len(new_list) > len(original_list):
+        new_file = [x for x in new_list if x not in original_list]
+        with open(log_file, 'a') as file:
+            file.write(f'\nFile(s) Added: {new_file} at {current_time} \n')
+        return new_file
     else:
         return False
 
 
-def do_things_with_new_files(new_files: list):
+def do_things_with_changes(new_files: list):
     print(f'File Change Detected: {new_files}')
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    with open(log_file, 'a') as file:
-        file.write(f'Change Record: {new_files}, {current_time} \n')
+    if len(new_files) == 1:
+        with open(log_file, 'a') as file:
+            file.write(f'File Change Detected: {new_files}, {current_time}\n')
+    else:
+        with open(log_file, 'a') as file:
+            file.write(f'Multiple File Changes Detected: {new_files}, {current_time}\n')
 
 
 def file_watcher(my_dir: str, poll_time: int):
@@ -43,19 +71,13 @@ def file_watcher(my_dir: str, poll_time: int):
         if 'watching' not in locals():
             original_list = file_in_directory(watch_dir)
             watching = 1
-
         time.sleep(pollTime)
-
         new_file_list = file_in_directory(watch_dir)
-
-        file_diff = list_compare(original_list, new_file_list)
-        differences_list = [x for x in original_list if x not in new_file_list]
+        file_diff = list_compare(original_list, new_file_list)  # list compare returns list of files, or False
         original_list = new_file_list
         if not file_diff:
             continue
-        do_things_with_new_files(differences_list)
+        do_things_with_changes(file_diff)
 
 
 file_watcher(watch_dir, pollTime)
-
-
