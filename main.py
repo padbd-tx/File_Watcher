@@ -28,13 +28,15 @@ def file_in_directory(my_dir: str):
 # Function comparing two lists:
 def list_compare(original_list: list, new_list: list):
     """
-    This function compares two lists of files and returns a list of files that are present in the second list but not in the first, or False if there are no differences between the lists.
+    This function compares two lists of files and returns a list of files that are present in the second list but not
+    in the first, or False if there are no differences between the lists.
 
     :param original_list: The first list of files to compare.
     :type original_list: List[Tuple[str, int]]
     :param new_list: The second list of files to compare.
     :type new_list: List[Tuple[str, int]]
-    :return: A list of files that are present in the second list but not in the first, or False if there are no differences between the lists.
+    :return: A list of files that are present in the second list but not in the first,
+     or False if there are no differences between the lists.
     :rtype: Union[List[Tuple[str, int]], bool]
     """
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -56,6 +58,14 @@ def list_compare(original_list: list, new_list: list):
 
 
 def do_things_with_changes(new_files: list):
+    """
+    This function takes in a list of files and prints a message indicating the number of files that have changed.
+    If there is only one file that has changed, it logs the details of the change along with the current time
+     to a log file. If there are multiple files that have changed, it logs a message indicating that multiple files
+      have changed, along with the details of the changes and the current time.
+
+    :param new_files:
+    """
     print(f'File Change Detected: {new_files}')
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     if len(new_files) == 1:
@@ -67,6 +77,14 @@ def do_things_with_changes(new_files: list):
 
 
 def file_watcher(my_dir: str, poll_time: int):
+    """
+    This function takes in a directory and a poll time, and continually checks the directory for changes.
+    When changes are detected, it logs the details of the changes along with the current time to a log file.
+
+    :param my_dir:
+    :param poll_time:
+    :return:
+    """
     while True:
         if 'watching' not in locals():
             original_list = file_in_directory(watch_dir)
