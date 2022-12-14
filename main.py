@@ -6,7 +6,7 @@ import datetime
 
 # Capture configuration settings
 
-watch_dir = r'D:\Users\Brad\Downloads'
+watch_dir = r'T:\CX Validations\Completed'
 pollTime = 5  # in seconds
 log_file = 'log.txt'
 
@@ -89,6 +89,7 @@ def file_watcher(my_dir: str, poll_time: int):
         if 'watching' not in locals():
             original_list = file_in_directory(watch_dir)
             watching = 1
+            print(f'Watching {watch_dir}')
         time.sleep(pollTime)
         new_file_list = file_in_directory(watch_dir)
         file_diff = list_compare(original_list, new_file_list)  # list compare returns list of files, or False
