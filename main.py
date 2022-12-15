@@ -1,9 +1,11 @@
 # Imports
+import os
 from os import listdir
 from os.path import isfile, join, getsize
 import time
 import datetime
 import ctypes
+
 
 # Capture configuration settings
 
@@ -74,14 +76,15 @@ def do_things_with_changes(new_files: list):
     """
     print(f'File Change Detected: {new_files}')
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    user = os.getenv('username')
     mbox('Change Detected', f'A change has been detected in {watch_dir} at \n{current_time}.\n'
                             f'\nCheck the log file for details.', 0)
     if len(new_files) == 1:
         with open(log_file, 'a') as file:
-            file.write(f'File Change Detected: {new_files}, {current_time}\n')
+            file.write(f'File Change Detected by: {user}, {new_files}, {current_time}\n')
     else:
         with open(log_file, 'a') as file:
-            file.write(f'Multiple File Changes Detected: {new_files}, {current_time}\n')
+            file.write(f'Multiple File Changes Detected by: {user}, {new_files}, {current_time}\n')
 
 
 def file_watcher(my_dir: str, poll_time: int):
@@ -97,7 +100,7 @@ def file_watcher(my_dir: str, poll_time: int):
         if 'watching' not in locals():
             original_list = file_in_directory(watch_dir)
             watching = 1
-            print(f'Watching {watch_dir}')
+            print(f'Watching: {watch_dir}')
         time.sleep(pollTime)
         new_file_list = file_in_directory(watch_dir)
         file_diff = list_compare(original_list, new_file_list)  # list compare returns list of files, or False

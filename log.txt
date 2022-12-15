@@ -15,3 +15,15 @@ File Change Detected: [('New Text Document.txt', 0)], 2022-12-14 20:25:48
 
 File(s) Deleted: [('New Text Document.txt', 0)] at 2022-12-14 20:26:34 
 File Change Detected: [('New Text Document.txt', 0)], 2022-12-14 20:26:34
+
+File(s) Deleted: [('Thumbs.db', 115712)] at 2022-12-15 08:55:33 
+File Change Detected: [('Thumbs.db', 115712)], 2022-12-15 08:55:33
+
+File(s) Added: [('New Text Document.txt', 0)] at 2022-12-15 09:41:03 
+File Change Detected:T1309BD, [('New Text Document.txt', 0)], 2022-12-15 09:41:03
+
+File(s) Deleted: [('New Text Document.txt', 0)] at 2022-12-15 09:42:24 
+File Change Detected:T1309BD, [('New Text Document.txt', 0)], 2022-12-15 09:42:24
+
+File(s) Deleted: [('New Text Document.txt', 0)] at 2022-12-15 09:43:23 
+File Change Detected by: T1309BD, [('New Text Document.txt', 0)], 2022-12-15 09:43:23
