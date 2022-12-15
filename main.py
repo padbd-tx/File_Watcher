@@ -7,12 +7,12 @@ import ctypes
 
 # Capture configuration settings
 
-watch_dir = r'D:\Users\Brad\Downloads'
+watch_dir = r'T:\CX Validations\Completed'
 pollTime = 5  # in seconds
 log_file = 'log.txt'
 
 
-# Define a messagebox:
+# Define a message box:
 def mbox(title, text, style):
     return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
@@ -74,8 +74,8 @@ def do_things_with_changes(new_files: list):
     """
     print(f'File Change Detected: {new_files}')
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    mbox('Change Detected', f'A file change has been detected in {watch_dir} at \n{current_time}. '
-                            f'\nCheck the log for details.', 0)
+    mbox('Change Detected', f'A change has been detected in {watch_dir} at \n{current_time}.\n'
+                            f'\nCheck the log file for details.', 0)
     if len(new_files) == 1:
         with open(log_file, 'a') as file:
             file.write(f'File Change Detected: {new_files}, {current_time}\n')
@@ -97,6 +97,7 @@ def file_watcher(my_dir: str, poll_time: int):
         if 'watching' not in locals():
             original_list = file_in_directory(watch_dir)
             watching = 1
+            print(f'Watching {watch_dir}')
         time.sleep(pollTime)
         new_file_list = file_in_directory(watch_dir)
         file_diff = list_compare(original_list, new_file_list)  # list compare returns list of files, or False
