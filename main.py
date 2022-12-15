@@ -3,12 +3,18 @@ from os import listdir
 from os.path import isfile, join, getsize
 import time
 import datetime
+import ctypes
 
 # Capture configuration settings
 
 watch_dir = r'T:\CX Validations\Completed'
 pollTime = 5  # in seconds
 log_file = 'log.txt'
+
+
+# Define a message box:
+def mbox(title, text, style):
+    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 
 # Function to return files in a directory:
@@ -68,6 +74,8 @@ def do_things_with_changes(new_files: list):
     """
     print(f'File Change Detected: {new_files}')
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    mbox('Change Detected', f'A change has been detected in {watch_dir} at \n{current_time}.\n'
+                            f'\nCheck the log file for details.', 0)
     if len(new_files) == 1:
         with open(log_file, 'a') as file:
             file.write(f'File Change Detected: {new_files}, {current_time}\n')
