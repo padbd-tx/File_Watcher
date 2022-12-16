@@ -1,12 +1,22 @@
-import tkinter as tk
+from tkinter import *
 
-root = tk.Tk()
 
-root.title("info title")
+def show_message(message, type='info', timeout=2500):
+    import tkinter as tk
+    from tkinter import messagebox as msgb
 
-tk.Label(root, text="This is the pop up message").pack()
+    root = tk.Tk()
+    root.withdraw()
+    try:
+        root.after(timeout, root.destroy)
+        if type == 'info':
+            msgb.showinfo('Info', message, master=root)
+        elif type == 'warning':
+            msgb.showwarning('Warning', message, master=root)
+        elif type == 'error':
+            msgb.showerror('Error', message, master=root)
+    except:
+        pass
 
-root.after(5000, root.destroy())
 
-root.mainloop()
-
+show_message('Message', type='info')
