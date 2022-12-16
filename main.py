@@ -3,18 +3,13 @@ from os import listdir
 from os.path import isfile, join, getsize
 import time
 import datetime
-import ctypes
+import tkinter as tk
+from tkinter import messagebox as msgb
 
 # Capture configuration settings
-
 watch_dir = r'T:\CX Validations\Completed'
 pollTime = 5  # in seconds
 log_file = 'log.txt'
-
-
-# Define a message box:
-def mbox(title, text, style):
-    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 
 # Function to return files in a directory:
@@ -23,12 +18,43 @@ def file_in_directory(my_dir: str):
     This function takes a directory path as input and returns a list of files in the directory, along with their sizes.
 
     :param my_dir: The directory path to search for files.
-    :type my_dir: str
+    :box_type my_dir: str
     :return: A list of tuples containing the file names and sizes.
     :rtype: list
     """
     files = [(f, getsize(join(my_dir, f))) for f in listdir(my_dir) if isfile(join(my_dir, f))]
     return files
+
+
+# Define a message box:
+def show_message(message, box_type='info', timeout=2500):
+    """
+    show_message(message, box_type='info', timeout=2500)
+
+    Displays a message box with the given message, box_type, and timeout.
+
+    Args:
+    message (str): The message to be displayed in the message box.
+    box_type (str, optional): The box_type of message to be displayed. Can be 'info', 'warning', or 'error'.
+    Defaults to 'info'.
+    timeout (int, optional): The time in milliseconds after which the message box will be automatically closed.
+        Defaults to 2500.
+
+    Returns:
+    None
+    """
+    root = tk.Tk()
+    root.withdraw()
+    try:
+        root.after(timeout, root.destroy)
+        if box_type == 'info':
+            msgb.showinfo('Change Detected', message, master=root)
+        elif box_type == 'warning':
+            msgb.showwarning('Warning', message, master=root)
+        elif box_type == 'error':
+            msgb.showerror('Error', message, master=root)
+    except (tk.TclError, ValueError):
+        pass
 
 
 # Function comparing two lists:
@@ -38,9 +64,9 @@ def list_compare(original_list: list, new_list: list):
     in the first, or False if there are no differences between the lists.
 
     :param original_list: The first list of files to compare.
-    :type original_list: List[Tuple[str, int]]
+    :box_type original_list: List[Tuple[str, int]]
     :param new_list: The second list of files to compare.
-    :type new_list: List[Tuple[str, int]]
+    :box_type new_list: List[Tuple[str, int]]
     :return: A list of files that are present in the second list but not in the first,
      or False if there are no differences between the lists.
     :rtype: Union[List[Tuple[str, int]], bool]
@@ -74,8 +100,9 @@ def do_things_with_changes(new_files: list):
     """
     print(f'File Change Detected: {new_files}')
     current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    mbox('Change Detected', f'A change has been detected in {watch_dir} at \n{current_time}.\n'
-                            f'\nCheck the log file for details.', 0)
+    show_message(f'A change has been detected in {watch_dir}\n'
+                 f'The change happened at {current_time}.\n'
+                 f'\nCheck the log file for details.', box_type='info', timeout=10000)
     if len(new_files) == 1:
         with open(log_file, 'a') as file:
             file.write(f'File Change Detected: {new_files}, {current_time}\n')
@@ -97,7 +124,7 @@ def file_watcher(my_dir: str, poll_time: int):
         if 'watching' not in locals():
             original_list = file_in_directory(watch_dir)
             watching = 1
-            print(f'Watching {watch_dir}')
+            print(f'Watching: {watch_dir}')
         time.sleep(pollTime)
         new_file_list = file_in_directory(watch_dir)
         file_diff = list_compare(original_list, new_file_list)  # list compare returns list of files, or False
